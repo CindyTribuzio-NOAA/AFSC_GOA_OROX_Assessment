@@ -13,8 +13,9 @@ database.csv
 # old assessment archive
 archive
 
-# development folder
+# folders
 Outside_Model_Analytics/
+Output/2021/RFX/ADMB_output/
 Documents/
 Data/
 
