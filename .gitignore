@@ -1,0 +1,34 @@
+# R projects
+.Rproj.user
+.Rhistory
+.RData
+.Ruserdata
+
+# usernames and passwords for db connections
+database.csv
+
+# confidential fishery dependent data
+*confidential*
+
+# old assessment archive
+archive
+
+# development folder
+Outside_Model_Analytics/
+Documents/
+Output/
+Data/
+
+# large files
+*RACE_CATCH*
+
+# other file types we don't want to track
+*.xlsx
+*.xlsm
+*.docx
+*.pptx
+*.png
+*.Rdata
+
+# Windows thumbnail cache files
+Thumbs.db
