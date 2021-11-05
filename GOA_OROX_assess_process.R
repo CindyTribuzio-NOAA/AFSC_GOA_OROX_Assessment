@@ -151,6 +151,7 @@ source(paste(getwd(),"/Code/Harvest_specs/OROX_ABCOFL_Apport.R",sep=""))
 # GOA wide
 spec_hist <- read_csv(paste(getwd(),"/Data/OROX_specs_history.csv",sep=""))
 
+# the below will throw an error if you run the harvest spec code more than once, because the AYR+1 will be repeated
 spec_change <- spec_hist %>% 
   filter(Year == AYR | Year == AYR+1) %>% 
   select(Year, ABC, OFL) %>% 
@@ -169,7 +170,10 @@ spec_change <- spec_hist %>%
 source(paste(getwd(),"/Code/Figures/OROX_figures.R",sep=""))
 
 # Tables Code ----
+# only has Exec Summary tables at this time, need to add the rest
+# need to make sure to round catch at the lower resolution to ensure all tables add up the same way, done by hand in 2021
+# 
 
-
+source(paste(getwd(),"/Code/Tables/GOAOROX_Tables.R",sep=""))
 
 # SARA Code ----

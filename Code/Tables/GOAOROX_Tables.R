@@ -185,21 +185,18 @@ OROX_specs_old <- read_csv(paste(getwd(),"/Data/OROX_specs_history.csv",sep=""))
 catchdat <- read_csv(paste(getwd(),"/Output/", AYR, "/Catch/OROXcomplex_catch", AYR, "_confidential.csv",sep=""))
 
 GOA_sum_catch <- catchdat %>% 
-  mutate(tot_catch = round(tot_catch, 0)) %>% 
   filter(year%in% c(AYR-1, AYR)) %>% 
   group_by(year) %>% 
-  summarise(Catch = sum(tot_catch, na.rm=T)) %>% 
+  summarise(Catch = round(sum(tot_catch, na.rm=T), 0)) %>% 
   select(!year)
 
 sum_catch <- catchdat %>%
-  mutate(tot_catch = round(tot_catch, 0)) %>% 
   filter(year%in% c(AYR-1, AYR)) %>% 
   group_by(fmp_subarea, year) %>% 
   summarise(Catch = round(sum(tot_catch, na.rm=T), 0)) %>% 
   pivot_wider(names_from = fmp_subarea, values_from = Catch) %>%
   bind_cols(OROX_specs_old, GOA_sum_catch) %>% 
-  select(Year, WG, CG, WY, SE, Catch, ABC, TAC) %>% 
-  rename_all(catch_cols)
+  select(Year, WG, CG, WY, SE, Catch, ABC, TAC)
 
 names(sum_catch) <- catch_cols
 
@@ -432,20 +429,17 @@ TAC_AYR <- Apport_hist %>%
 Catch_EG_AYR <- catchdat %>%
   filter(fmp_subarea %in% c("WY", "SE"),
          year == AYR) %>% 
-  mutate(tot_catch = round(tot_catch, 0)) %>% 
   group_by(fmp_subarea) %>% 
   summarise(Catch = round(sum(tot_catch, na.rm=T), 0)) %>% 
   arrange(desc(fmp_subarea))
 Catch_GOA_AYR <- catchdat %>%
   filter(year == AYR) %>% 
-  mutate(tot_catch = round(tot_catch, 0)) %>% 
   group_by() %>% 
   summarise(Catch = round(sum(tot_catch, na.rm=T), 0)) %>% 
   mutate(fmp_subarea = "GOA")
 Catch_AYR <- catchdat %>%
   filter(fmp_subarea %in% c("CG", "WG"),
          year == AYR) %>% 
-  mutate(tot_catch = round(tot_catch, 0)) %>% 
   group_by() %>% 
   summarise(Catch = round(sum(tot_catch, na.rm=T), 0)) %>% 
   mutate(fmp_subarea = "WC") %>% 

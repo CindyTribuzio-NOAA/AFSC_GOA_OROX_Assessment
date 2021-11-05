@@ -147,21 +147,21 @@ catchfig_pres<-grid.arrange(arrangeGrob(catch_area_pres, catch_species_pres, nro
 ggsave("OROX_catch2_pres.png", path = figdir, plot=catchfig_pres,dpi=600, bg="transparent",width=15,height=9)
 
 #Catch by species and area, W/CGOA only (not in assessment)
-ABC<-as.data.frame(matrix(c("WESTERN GOA","CENTRAL GOA",55,1479),nrow=2))
-colnames(ABC)<-c("Area","ABC")
-ABC$ABC<-as.numeric(as.character(ABC$ABC))
-ann_text <- data.frame(Year = 2011,Catch = 991,lab = "2014 Apportioned ABC", Area = factor("WESTERN GOA",levels = c("WESTERN GOA","CENTRAL GOA")))
-catch_species_area<-ggplot(top_spec3[top_spec3$Area=="WESTERN GOA"|top_spec3$Area=="CENTRAL GOA",], 
-                      aes(x=Year, y=Catch,fill=Species,order=-as.numeric(Species))) + 
-  geom_bar(stat="identity")+
-  geom_hline(data=ABC,aes(yintercept=ABC,color="red"),linetype="dashed",size=2,show_guide=F)+
-  scale_fill_manual(values=rev(brewer.pal(n=length(unique(top_spec3$Species)),"Blues")),name="Species")+
-  scale_y_continuous(expand=c(0,0))+
-  #coord_cartesian(ylim=c(0,1500))+
-  facet_wrap(c("Area"))+
-  labs(y="",x="")+
-  theme_doc()+theme(legend.position=c(0.1,0.75))
-ggsave("OROX_WCGOA.png",path = figdir, plot=catch_species_area,dpi=600, bg="transparent",width=15,height=6)
+#ABC<-as.data.frame(matrix(c("WESTERN GOA","CENTRAL GOA",55,1479),nrow=2))
+#colnames(ABC)<-c("Area","ABC")
+#ABC$ABC<-as.numeric(as.character(ABC$ABC))
+#ann_text <- data.frame(Year = 2011,Catch = 991,lab = "2014 Apportioned ABC", Area = factor("WESTERN GOA",levels = c("WESTERN GOA","CENTRAL GOA")))
+#catch_species_area<-ggplot(top_spec3[top_spec3$Area=="WESTERN GOA"|top_spec3$Area=="CENTRAL GOA",], 
+#                      aes(x=Year, y=Catch,fill=Species,order=-as.numeric(Species))) + 
+#  geom_bar(stat="identity")+
+#  geom_hline(data=ABC,aes(yintercept=ABC,color="red"),linetype="dashed",size=2,show_guide=F)+
+#  scale_fill_manual(values=rev(brewer.pal(n=length(unique(top_spec3$Species)),"Blues")),name="Species")+
+#  scale_y_continuous(expand=c(0,0))+
+#  #coord_cartesian(ylim=c(0,1500))+
+#  facet_wrap(c("Area"))+
+#  labs(y="",x="")+
+#  theme_doc()+theme(legend.position=c(0.1,0.75))
+#ggsave("OROX_WCGOA.png",path = figdir, plot=catch_species_area,dpi=600, bg="transparent",width=15,height=6)
 
 # Figure 5 ----
 #catch by area for top 6 species
@@ -195,8 +195,8 @@ AYR_specs <- read_csv(paste(getwd(),"/Output/", AYR, "/Harvest_specs/OROX_harves
 
 AYR_appt_ABC_EGOA <- AYR_specs %>% 
   filter(Group == "OROX", 
-         REGULATORY_AREA_NAME %in% c("WY", "EYSEO")) %>% 
-  mutate(REGULATORY_AREA_NAME = if_else(REGULATORY_AREA_NAME == "WY", "WYAK", "SOUTHEAST")) %>% 
+         REGULATORY_AREA_NAME %in% c("WYAK", "SOUTHEAST")) %>% 
+  #mutate(REGULATORY_AREA_NAME = if_else(REGULATORY_AREA_NAME == "WY", "WYAK", "SOUTHEAST")) %>% 
   select(REGULATORY_AREA_NAME, ABC) %>% 
   rename(fmp_subarea = REGULATORY_AREA_NAME)
 
@@ -236,6 +236,7 @@ fmpsub_specs_hist <- read_csv(paste(getwd(),"/Data/OROX_ABC_App_historical.csv",
 
 ABC_change <- fmpsub_specs_hist %>% 
   filter(year >= AYR) %>% 
+  select(!TAC) %>% 
   pivot_wider(names_from = year, values_from = ABC) %>%
   rename(ABC_AYR = 2, ABC_next = 3) %>% 
   mutate(Pchange = paste(round(((ABC_next - ABC_AYR)/ABC_AYR)*100,0),"%",sep=""),
@@ -244,10 +245,19 @@ ABC_change <- fmpsub_specs_hist %>%
                              if_else(fmp_subarea == "WYAK",2,1))) %>% 
   arrange(fakeorder)
 
+dline <- fmpsub_specs_hist %>% 
+  filter(year >= AYR) %>% 
+  select(!TAC) %>% 
+  mutate(fmp_subarea = factor(fmp_subarea, levels = c("WEST_CENTRAL","WYAK","SOUTHEAST")),
+         fakeorder = if_else(fmp_subarea == "WEST_CENTRAL",3,
+                             if_else(fmp_subarea == "WYAK",2,1))) %>% 
+  arrange(fakeorder)
+
 C_ABC <- ggplot(cd3, aes(x=year, y=Catch, fill=fmp_subarea, order=-as.numeric(fmp_subarea)))+ 
    geom_bar(stat="identity",position="stack", show.legend = F)+
-   geom_line(aes(x = year, y = ABC))+
+   geom_line(aes(x = year, y = ABC), show.legend = F)+
    geom_point(data = AYR_appt_ABC, aes(x = year, y = ABC), shape = 8, show.legend = F)+
+   geom_line(data = dline, aes(x = year, y = ABC), linetype = "dashed")+
    geom_text(data = ABC_change, aes(x = AYR+1, y = ABC_AYR, label = Pchange), color = "black")+
    scale_fill_manual(values=rev(brewer.pal(n=length(unique(cd2$fmp_subarea)),"Greens")),name="Area")+
    facet_grid(fmp_subarea~., scales = "free")+
@@ -256,12 +266,13 @@ C_ABC <- ggplot(cd3, aes(x=year, y=Catch, fill=fmp_subarea, order=-as.numeric(fm
                      axis.line.x = element_line(),
                      axis.line.y = element_line())
  
- ggsave("GOAOROX_FigX_doc.png",path = figdir, plot= C_ABC,dpi=600, bg="transparent",width=7,height=8)
+ ggsave("GOAOROX_Fig12_doc.png",path = figdir, plot= C_ABC,dpi=600, bg="transparent",width=7,height=8)
  
  C_ABC_pres <- ggplot(cd3, aes(x=year, y=Catch, fill=fmp_subarea, order=-as.numeric(fmp_subarea)))+ 
    geom_bar(stat="identity",position="stack", show.legend = F)+
    geom_line(aes(x = year, y = ABC), color = "cornsilk")+
    geom_point(data = AYR_appt_ABC, aes(x = year, y = ABC), shape = 8, show.legend = F, color = "cornsilk")+
+   geom_line(data = dline, aes(x = year, y = ABC), linetype = "dashed")+
    geom_text(data = ABC_change, aes(x = AYR+1, y = ABC_AYR, label = Pchange), color = "cornsilk")+
    scale_fill_manual(values=rev(brewer.pal(n=length(unique(cd2$fmp_subarea)),"Greens")),name="Area")+
    facet_grid(fmp_subarea~., scales = "free")+
@@ -270,7 +281,7 @@ C_ABC <- ggplot(cd3, aes(x=year, y=Catch, fill=fmp_subarea, order=-as.numeric(fm
                      axis.line.x = element_line(),
                      axis.line.y = element_line())
  
- ggsave("GOAOROX_FigX_pres.png",path = figdir, plot= C_ABC_pres,dpi=600, bg="transparent",width=7,height=8)
+ ggsave("GOAOROX_Fig12_pres.png",path = figdir, plot= C_ABC_pres,dpi=600, bg="transparent",width=7,height=8)
 
 # BIOMASS FIGS ----
 #good website for colors: http://www.cookbook-r.com/Graphs/Colors_(ggplot2)/
@@ -303,13 +314,13 @@ Bareadoc<-ggplot(area_biom, aes(x=YEAR, y=Biom_mt/1000, fill=REGULATORY_AREA_NAM
   scale_fill_manual(values=rev(brewer.pal(n=length(unique(area_biom$REGULATORY_AREA_NAME)),"Greens")),name="Area")+
   scale_y_continuous(expand=c(0,0),limits=c(0,200))+
   labs(y="",x="")+
-  theme_doc()
+  theme_doc()+theme(plot.margin=unit(c(0,0.8,0,0.2), "cm"))
 Bareapres<-ggplot(area_biom, aes(x=YEAR, y=Biom_mt/1000, fill=REGULATORY_AREA_NAME,order=-as.numeric(REGULATORY_AREA_NAME)))+ 
   geom_bar(stat="identity",position="stack")+
   scale_fill_manual(values=rev(brewer.pal(n=length(unique(area_biom$REGULATORY_AREA_NAME)),"Greens")),name="Area")+
   scale_y_continuous(expand=c(0,0),limits=c(0,200))+
   labs(y="",x="")+
-  theme_pres()
+  theme_pres()+theme(plot.margin=unit(c(0,0.8,0,0.2), "cm"))
 
 #biomass by species
 #by species with top species
