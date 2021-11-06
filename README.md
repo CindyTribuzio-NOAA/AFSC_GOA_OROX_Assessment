@@ -8,3 +8,6 @@ https://www.npfmc.org/fishery-management-plan-team/goa-bsai-groundfish-plan-team
 Notes:
 1) large RACE survey catch data files are not uploaded and can be queried through AKFIN
 2) confidential fishery data are not uploaded
+3) ADMB model output files are not uploaded
+
+GITHUB address: https://github.com/tribuzio/AFSC_GOA_OROX_Assessment
