@@ -5,7 +5,7 @@
 datadir<-paste(getwd(),"/Output/",AYR,"/RACE_Biomass/",sep="")
 outdir<-paste(getwd(),"/Output/",AYR,"/RFX/",sep="")
 codedir<-paste(getwd(),"/Code/RFX",sep="")
-admboutdir<-paste(outdir,"ADMB_outputs",sep="")
+admboutdir<-paste(outdir,"ADMB_out_files",sep="")
 
 #test for presence of correct folder and create it if it doesn't exist
 dir.create(outdir, showWarnings = T)
