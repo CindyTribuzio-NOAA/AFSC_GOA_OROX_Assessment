@@ -5,6 +5,8 @@ https://www.fisheries.noaa.gov/alaska/population-assessments/north-pacific-groun
 Presentations of this assessment at the North Pacific Fishery Management Council Groundfish Plan Teams are here:
 https://www.npfmc.org/fishery-management-plan-team/goa-bsai-groundfish-plan-team/
 
+At this point, the assessment can be run completly via the "GOA_OROX_assess_process.R" file. Some minor code adjustments will be needed for the next full assessment. Tables still need to be coded as only the tables for the Executive Summary have been coded. Other needed "bugs" are noted in the code.
+
 Notes:
 1) large RACE survey catch data files are not uploaded and can be queried through AKFIN
 2) confidential fishery data are not uploaded
