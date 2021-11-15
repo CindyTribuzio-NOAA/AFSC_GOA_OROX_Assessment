@@ -144,7 +144,7 @@ ggsave("GOAOROX_Fig4_doc.png", path = figdir, plot=catchfig_doc,dpi=600, bg="tra
 catchfig_pres<-grid.arrange(arrangeGrob(catch_area_pres, catch_species_pres, nrow = 2,
                                        left = textGrob("Catch (t)", rot = 90, vjust = 1.5,gp=gpar(col="#FFFFCC", fontsize=20)),
                                        bottom = textGrob("Year", vjust=0,gp=gpar(col="#FFFFCC", fontsize=20))))
-ggsave("OROX_catch2_pres.png", path = figdir, plot=catchfig_pres,dpi=600, bg="transparent",width=15,height=9)
+ggsave("OROX_Fig42_pres.png", path = figdir, plot=catchfig_pres,dpi=600, bg="transparent",width=15,height=9)
 
 #Catch by species and area, W/CGOA only (not in assessment)
 #ABC<-as.data.frame(matrix(c("WESTERN GOA","CENTRAL GOA",55,1479),nrow=2))
@@ -272,7 +272,7 @@ C_ABC <- ggplot(cd3, aes(x=year, y=Catch, fill=fmp_subarea, order=-as.numeric(fm
    geom_bar(stat="identity",position="stack", show.legend = F)+
    geom_line(aes(x = year, y = ABC), color = "cornsilk")+
    geom_point(data = AYR_appt_ABC, aes(x = year, y = ABC), shape = 8, show.legend = F, color = "cornsilk")+
-   geom_line(data = dline, aes(x = year, y = ABC), linetype = "dashed")+
+   geom_line(data = dline, aes(x = year, y = ABC), linetype = "dashed", color = "cornsilk")+
    geom_text(data = ABC_change, aes(x = AYR+1, y = ABC_AYR, label = Pchange), color = "cornsilk")+
    scale_fill_manual(values=rev(brewer.pal(n=length(unique(cd2$fmp_subarea)),"Greens")),name="Area")+
    facet_grid(fmp_subarea~., scales = "free")+
@@ -419,9 +419,10 @@ SCB_in_dat <- SC_biom %>%
 SC_inset<-ggplot(data=SCB_in_dat,aes(x=YEAR,y=Biomass/1000))+
   geom_point(size=3,color="black")+
   geom_errorbar(aes(x=YEAR,ymax=Biom_UL/1000,ymin=Biom_LL/1000), width=0.5,color="black")+
-  geom_line(aes(x=YEAR,y=RFX_UL/1000),linetype="dashed",color="orange",size=1)+
+  geom_ribbon(aes(ymin=RFX_LL/1000, ymax=RFX_UL/1000), alpha=0.1, fill = "orange")+
+  #geom_line(aes(x=YEAR,y=RFX_UL/1000),linetype="dashed",color="orange",size=1)+
   geom_line(aes(x=YEAR,y=RFX_biom/1000),color="orange",size=1)+
-  geom_line(aes(x=YEAR,y=RFX_LL/1000),linetype="dashed",color="orange",size=1)+
+  #geom_line(aes(x=YEAR,y=RFX_LL/1000),linetype="dashed",color="orange",size=1)+
   facet_grid(REGULATORY_AREA_NAME~.,scales="free")+
   scale_y_continuous(expand=c(0,0),breaks=c(0,0.4))+
   scale_x_continuous(limits=c(1983,AYR+1),expand=c(0,0),breaks=c(1980,1990,2000,2010,2020))+
@@ -451,9 +452,10 @@ SC_inset<-ggplot(data=SCB_in_dat,aes(x=YEAR,y=Biomass/1000))+
 SC_doc<-ggplot(data=SC_biom,aes(x=YEAR,y=Biomass/1000))+
   geom_point(size=3,color="black")+
   geom_errorbar(aes(x=YEAR,ymax=Biom_UL/1000,ymin=Biom_LL/1000), width=0.5,color="black")+
-  geom_line(aes(x=YEAR,y=RFX_UL/1000),linetype="dashed",color="orange",size=1)+
+  geom_ribbon(aes(ymin=RFX_LL/1000, ymax=RFX_UL/1000), alpha=0.1, fill = "orange")+
+  #geom_line(aes(x=YEAR,y=RFX_UL/1000),linetype="dashed",color="orange",size=1)+
   geom_line(aes(x=YEAR,y=RFX_biom/1000),color="orange",size=1)+
-  geom_line(aes(x=YEAR,y=RFX_LL/1000),linetype="dashed",color="orange",size=1)+
+  #geom_line(aes(x=YEAR,y=RFX_LL/1000),linetype="dashed",color="orange",size=1)+
   facet_grid(REGULATORY_AREA_NAME~.,scales="free")+
   labs(y="Biomass (1000s t)",x="")+
   scale_y_continuous(expand=c(0,0))+
@@ -485,9 +487,10 @@ SC_doc<-ggplot(data=SC_biom,aes(x=YEAR,y=Biomass/1000))+
 ORdoc<-ggplot(data=T5_biom,aes(x=YEAR,y=Biomass/1000))+
   geom_point(size=3,color="black")+
   geom_errorbar(aes(x=YEAR,ymax=Biom_UL/1000,ymin=Biom_LL/1000), width=0.5,color="black")+
-  geom_line(aes(x=YEAR,y=RFX_UL/1000),linetype="dashed",color="orange",size=1)+
-  geom_line(aes(x=YEAR,y=RFX_biom/1000,colour=Group),color="orange",size=1)+
-  geom_line(aes(x=YEAR,y=RFX_LL/1000),linetype="dashed",color="orange",size=1)+
+  geom_ribbon(aes(ymin=RFX_LL/1000, ymax=RFX_UL/1000), alpha=0.1, fill = "orange")+
+  #geom_line(aes(x=YEAR,y=RFX_UL/1000),linetype="dashed",color="orange",size=1)+
+  geom_line(aes(x=YEAR,y=RFX_biom/1000),color="orange",size=1)+
+  #geom_line(aes(x=YEAR,y=RFX_LL/1000),linetype="dashed",color="orange",size=1)+
   facet_grid(REGULATORY_AREA_NAME~.,scales="free")+
   labs(y="",x="")+
   scale_y_continuous(expand=c(0,0))+
@@ -503,11 +506,12 @@ RFX_doc<-grid.arrange(arrangeGrob(SC_doc, ORdoc, ncol = 2,
 ggsave("GOAOROX_Fig9_doc.png", path = figdir, plot=RFX_doc,dpi=600, bg="transparent",width=15,height=9)
 
 SC_inset_pres<-ggplot(data=SCB_in_dat,aes(x=YEAR,y=Biomass/1000))+
-  geom_point(size=3,color="cornsilk")+
-  geom_errorbar(aes(x=YEAR,ymax=Biom_UL/1000,ymin=Biom_LL/1000), width=0.5,color="cornsilk")+
-  geom_line(aes(x=YEAR,y=RFX_UL/1000),linetype="dashed",color="orange",size=1)+
+  geom_ribbon(aes(ymin=RFX_LL/1000, ymax=RFX_UL/1000), alpha=0.7, fill = "grey70")+
+  geom_point(size=3,color="yellow")+
+  geom_errorbar(aes(x=YEAR,ymax=Biom_UL/1000,ymin=Biom_LL/1000), width=0.7,color="yellow")+
+  #geom_line(aes(x=YEAR,y=RFX_UL/1000),linetype="dashed",color="orange",size=1)+
   geom_line(aes(x=YEAR,y=RFX_biom/1000),color="orange",size=1)+
-  geom_line(aes(x=YEAR,y=RFX_LL/1000),linetype="dashed",color="orange",size=1)+
+  #geom_line(aes(x=YEAR,y=RFX_LL/1000),linetype="dashed",color="orange",size=1)+
   facet_grid(REGULATORY_AREA_NAME~.,scales="free")+
   scale_y_continuous(expand=c(0,0),breaks=c(0,0.4))+
   scale_x_continuous(limits=c(1983,AYR+1),expand=c(0,0),breaks=c(1980,1990,2000,2010,2020))+
@@ -534,11 +538,12 @@ SC_inset_pres<-ggplot(data=SCB_in_dat,aes(x=YEAR,y=Biomass/1000))+
   )
 
 SC_pres<-ggplot(data=SC_biom,aes(x=YEAR,y=Biomass/1000))+
-  geom_point(size=3,color="cornsilk")+
-  geom_errorbar(aes(x=YEAR,ymax=Biom_UL/1000,ymin=Biom_LL/1000), width=0.5,color="cornsilk")+
-  geom_line(aes(x=YEAR,y=RFX_UL/1000),linetype="dashed",color="orange",size=1)+
+  geom_ribbon(aes(ymin=RFX_LL/1000, ymax=RFX_UL/1000), alpha=0.7, fill = "grey70")+
+  geom_point(size=3,color="yellow")+
+  geom_errorbar(aes(x=YEAR,ymax=Biom_UL/1000,ymin=Biom_LL/1000), width=0.7,color="yellow")+
+  #geom_line(aes(x=YEAR,y=RFX_UL/1000),linetype="dashed",color="orange",size=1)+
   geom_line(aes(x=YEAR,y=RFX_biom/1000),color="orange",size=1)+
-  geom_line(aes(x=YEAR,y=RFX_LL/1000),linetype="dashed",color="orange",size=1)+
+  #geom_line(aes(x=YEAR,y=RFX_LL/1000),linetype="dashed",color="orange",size=1)+
   facet_grid(REGULATORY_AREA_NAME~.,scales="free")+
   labs(y="Biomass (1000s t)",x="")+
   scale_y_continuous(expand=c(0,0))+
@@ -567,11 +572,12 @@ SC_pres<-ggplot(data=SC_biom,aes(x=YEAR,y=Biomass/1000))+
   )
 
 ORpres<-ggplot(data=T5_biom,aes(x=YEAR,y=Biomass/1000))+
-  geom_point(size=3,color="cornsilk")+
-  geom_errorbar(aes(x=YEAR,ymax=Biom_UL/1000,ymin=Biom_LL/1000), width=0.5,color="cornsilk")+
-  geom_line(aes(x=YEAR,y=RFX_UL/1000),linetype="dashed",color="orange",size=1)+
-  geom_line(aes(x=YEAR,y=RFX_biom/1000,colour=Group),color="orange",size=1)+
-  geom_line(aes(x=YEAR,y=RFX_LL/1000),linetype="dashed",color="orange",size=1)+
+  geom_ribbon(aes(ymin=RFX_LL/1000, ymax=RFX_UL/1000), alpha=0.7, fill = "grey70")+
+  geom_point(size=3,color="yellow")+
+  geom_errorbar(aes(x=YEAR,ymax=Biom_UL/1000,ymin=Biom_LL/1000), width=0.7,color="yellow")+
+  #geom_line(aes(x=YEAR,y=RFX_UL/1000),linetype="dashed",color="orange",size=1)+
+  geom_line(aes(x=YEAR,y=RFX_biom/1000),color="orange",size=1)+
+  #geom_line(aes(x=YEAR,y=RFX_LL/1000),linetype="dashed",color="orange",size=1)+
   facet_grid(REGULATORY_AREA_NAME~.,scales="free")+
   labs(y="",x="")+
   scale_y_continuous(expand=c(0,0))+
@@ -748,11 +754,17 @@ ggsave("GOAOROX_FigXX_doc.png", path = figdir, plot=EXP_fig,dpi=600, bg="transpa
 
 # WTM appears to track combined biomass of M=0.05 (silvergray) and M=0.06 
 # (9 species, of which redbanded is far and away the greatest) groups
+WTMend <- read_csv(paste(getwd(),"/Output/", AYR, "/Harvest_Specs/OROX_Wtd_M_retro.csv",sep=""))
+yrs_surv <- unique(biom_dat$YEAR)
+
 scaledM <- WTMend %>% 
   mutate(M_scale = (WTM-min(WTM))/(max(WTM)-min(WTM)))
-T5_Mbiom <- RFXB %>% 
+
+RFX_retro <- read_csv(paste(getwd(),"/Outside_Model_Analytics/RFX_retro/RFX_Biomass_ALL_RETRO.csv",sep=""))
+T5_Mbiom <- RFX_retro %>% 
   filter(grepl("M0", Group), # | Group == "OROX_SC"
-         REGULATORY_AREA_NAME == "GOA")
+         REGULATORY_AREA_NAME == "GOA",
+         YEAR == Endyr)
 
 # This years Wt_M changes from last assessment
 M_change <- WTMend %>% 
@@ -779,7 +791,9 @@ Wt_M_plot_pres<- ggplot(T5_Mbiom, aes(x=YEAR, y= Biom_est))+
   labs(y="Biomass Proportion",x="Year")+
   scale_x_continuous(expand = c(0,0))+
   scale_y_continuous(expand = c(0,0))+
-  theme_pres()
+  theme_pres()+
+  theme(axis.text=element_text(size=15,colour='#FFFFCC',face="bold"),
+        strip.text=element_text(size=15,colour='#FFFFCC',face="bold"))
 ggsave("GOAOROX_Wt_M_pres.png", path = figdir, plot=Wt_M_plot_pres,dpi=600, bg="transparent",width=10,height=8)
 
 # Changes in Survey Biomass
@@ -832,7 +846,18 @@ biom_change <- ggplot(RACE_B2, aes(x=YEAR, y=Group_Biom/1000, color = Species, f
   labs(y="Survey Biomass (1,000s mt)",x="Year")+
   facet_grid(Species~REGULATORY_AREA_NAME, scales = "free")+
   theme_doc()
-ggsave("GOAOROX_biom_change_doc.png", path = figdir, plot=biom_change,dpi=600, bg="transparent",width=15,height=9)
+ggsave("GOAOROX_Fig5_doc.png", path = figdir, plot=biom_change,dpi=600, bg="transparent",width=15,height=9)
+
+biom_change_pres <- ggplot(RACE_B2, aes(x=YEAR, y=Group_Biom/1000, color = Species, fill = Species, shape = Species))+
+  geom_point(show.legend = F, size = 3)+
+  geom_line(show.legend = F)+
+  geom_text(data = GOA_change, aes(x = 2015, y = (maxBiom/1000)-(maxBiom/1000*0.1), label = Pchange), color = "cornsilk", size = 6)+
+  labs(y="Survey Biomass (1,000s mt)",x="Year")+
+  facet_grid(Species~REGULATORY_AREA_NAME, scales = "free")+
+  theme_pres()+
+  theme(axis.text=element_text(size=15,colour='#FFFFCC',face="bold"),
+        strip.text=element_text(size=15,colour='#FFFFCC',face="bold"))
+ggsave("GOAOROX_Fig5_pres.png", path = figdir, plot=biom_change_pres,dpi=600, bg="transparent",width=15,height=9)
 
 TierB <- read_csv(paste(getwd(),"/Output/",AYR,"/RACE_Biomass/RACE_Biomass_GOA_OROX.csv",sep=""))
 TierB2 <- TierB %>% 
@@ -1007,9 +1032,18 @@ sector_disc <- ggplot(OROX_catch_dat2, aes(x = year, y = disc_rate, color = gear
   labs(x = "Year", y = "Discard Rate")+
   theme_doc()+
   theme(panel.grid.major = element_line(color = "grey90"))
-ggsave("GOAOROX_sect_disc_doc.png", path = figdir, plot=sector_disc,dpi=600, bg="transparent",width=15,height=9)
+ggsave("GOAOROX_Fig4_doc.png", path = figdir, plot=sector_disc,dpi=600, bg="transparent",width=15,height=9)
 
-
+sector_disc_pres <- ggplot(OROX_catch_dat2, aes(x = year, y = disc_rate, color = gear, shape = gear))+
+  geom_point(show.legend = F, size = 4)+
+  geom_line(show.legend = F, size = 2)+
+  facet_grid(gear+harvest_sector~fmp_subarea)+
+  labs(x = "Year", y = "Discard Rate")+
+  theme_pres()+
+  theme(panel.grid.major = element_line(color = "grey90"),
+        axis.text=element_text(size=15,colour='#FFFFCC',face="bold"),
+        strip.text=element_text(size=15,colour='#FFFFCC',face="bold"))
+ggsave("GOAOROX_Fig4_doc.png", path = figdir, plot=sector_disc_pres,dpi=600, bg="transparent",width=15,height=9)
 
 
 

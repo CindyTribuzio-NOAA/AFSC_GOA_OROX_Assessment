@@ -144,6 +144,7 @@ source(paste(getwd(),"/Code/Catch/OROX_catch_hist.R",sep=""))
 
 # Harvest Specifications ----
 # Calculates OFL/ABC and apportionment
+# need to do a more retrospective analaysis of Wted M, with data peels. Probably pretty similar to what is calcuated here
 
 source(paste(getwd(),"/Code/Harvest_specs/OROX_ABCOFL_Apport.R",sep=""))
 

@@ -6,6 +6,8 @@ dir.create(specdir)
 RFXB<-read_csv(paste(getwd(),"/Output/",AYR,"/RFX/RFX_Biomass_GOA_OROX.csv",sep=""))
 
 #Weighted M for Tier 5 ----
+# this is not technically correct, the correct version is from the retrospective work
+# need to incorporate that into assessment code
 WTMend <- RFXB %>% 
   filter(grepl("M0", Group),
          REGULATORY_AREA_NAME == "GOA") %>% 
